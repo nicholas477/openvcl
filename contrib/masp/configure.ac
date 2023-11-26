@@ -77,7 +77,7 @@ AC_CHECK_FUNCS([atexit btowc bzero dup2 getcwd getpagesize gettimeofday \
 	psignal strsignal sysconf])
 
 
-AC_CONFIG_FILES([Makefile src/Makefile libiberty/Makefile include/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile include/Makefile])
 #AC_CONFIG_HEADERS([src/config.h libiberty/config.h])
 AC_CONFIG_HEADERS([include/config.h])
 
