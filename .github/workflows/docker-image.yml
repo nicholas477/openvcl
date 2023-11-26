@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Get dependencies
       run: |
-        apk add build-base binutils-dev
+        apk add build-base binutils-dev musl-obstack-dev
         
     - name: Compile MASP
       run: |
