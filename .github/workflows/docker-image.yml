@@ -21,4 +21,4 @@ jobs:
       run: |
         cd contrib/masp
         chmod +x ./configure && ./configure
-        make clean all -j$(getconf _NPROCESSORS_ONLN)
+        LDFLAGS=-lobstack make clean all -j$(getconf _NPROCESSORS_ONLN)
