@@ -20,5 +20,9 @@ jobs:
     - name: Compile MASP
       run: |
         cd contrib/masp
-        chmod +x ./configure && ./configure LIBS="-lobstack"
+        chmod +x ./configure && ./configure LIBS="-lobstack" # -lobstack is needed for alpine linux since it uses MUSL and doesn't have this function in libc
         make clean all -j$(getconf _NPROCESSORS_ONLN)
+
+    - name: Compile OpenVCL
+      run: |
+        make clean install -j16
