@@ -148,7 +148,7 @@ target_vendor = @target_vendor@
 
 bin_PROGRAMS = masp
 masp_SOURCES = masp.c macro.c sb.c hash.c
-masp_LDADD = ../libiberty/libiberty.a
+masp_LDADD = -lbfd
 
 EXTRA_DIST = as.h asintl.h bignum.h bin-bugs.h expr.h flonum.h fopen-same.h \
 	hash.h macro.h progress.h sb.h 
@@ -163,7 +163,7 @@ PROGRAMS = $(bin_PROGRAMS)
 am_masp_OBJECTS = masp.$(OBJEXT) macro.$(OBJEXT) sb.$(OBJEXT) \
 	hash.$(OBJEXT)
 masp_OBJECTS = $(am_masp_OBJECTS)
-masp_DEPENDENCIES = ../libiberty/libiberty.a
+masp_DEPENDENCIES = 
 masp_LDFLAGS =
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)/include

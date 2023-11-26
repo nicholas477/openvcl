@@ -35,7 +35,6 @@
 #else
 #include <strings.h>
 #endif
-#include "libiberty.h"
 #include "sb.h"
 
 /* These routines are about manipulating strings.
@@ -56,7 +55,7 @@
 
 #define dsize 5
 
-static void sb_check PARAMS ((sb *, int));
+static void sb_check PARAMS((sb*, int));
 
 /* Statistics of sb structures.  */
 
@@ -69,258 +68,247 @@ static sb_list_vector free_list;
 /* initializes an sb.  */
 
 void
-sb_build (ptr, size)
-     sb *ptr;
-     int size;
+    sb_build(ptr, size)
+        sb* ptr;
+int size;
 {
-  /* see if we can find one to allocate */
-  sb_element *e;
+	/* see if we can find one to allocate */
+	sb_element* e;
 
-  if (size > sb_max_power_two)
-    abort ();
+	if (size > sb_max_power_two)
+		abort();
 
-  e = free_list.size[size];
-  if (!e)
-    {
-      /* nothing there, allocate one and stick into the free list */
-      e = (sb_element *) xmalloc (sizeof (sb_element) + (1 << size));
-      e->next = free_list.size[size];
-      e->size = 1 << size;
-      free_list.size[size] = e;
-      string_count[size]++;
-    }
+	e = free_list.size[size];
+	if (!e)
+	{
+		/* nothing there, allocate one and stick into the free list */
+		e                    = (sb_element*)malloc(sizeof(sb_element) + (1 << size));
+		e->next              = free_list.size[size];
+		e->size              = 1 << size;
+		free_list.size[size] = e;
+		string_count[size]++;
+	}
 
-  /* remove from free list */
+	/* remove from free list */
 
-  free_list.size[size] = e->next;
+	free_list.size[size] = e->next;
 
-  /* copy into callers world */
-  ptr->ptr = e->data;
-  ptr->pot = size;
-  ptr->len = 0;
-  ptr->item = e;
+	/* copy into callers world */
+	ptr->ptr  = e->data;
+	ptr->pot  = size;
+	ptr->len  = 0;
+	ptr->item = e;
 }
 
 void
-sb_new (ptr)
-     sb *ptr;
+    sb_new(ptr)
+        sb* ptr;
 {
-  sb_build (ptr, dsize);
+	sb_build(ptr, dsize);
 }
 
 /* deallocate the sb at ptr */
 
 void
-sb_kill (ptr)
-     sb *ptr;
+    sb_kill(ptr)
+        sb* ptr;
 {
-  /* return item to free list */
-  ptr->item->next = free_list.size[ptr->pot];
-  free_list.size[ptr->pot] = ptr->item;
+	/* return item to free list */
+	ptr->item->next          = free_list.size[ptr->pot];
+	free_list.size[ptr->pot] = ptr->item;
 }
 
 /* add the sb at s to the end of the sb at ptr */
 
 void
-sb_add_sb (ptr, s)
-     sb *ptr;
-     sb *s;
+    sb_add_sb(ptr, s)
+        sb* ptr;
+sb* s;
 {
-  sb_check (ptr, s->len);
-  memcpy (ptr->ptr + ptr->len, s->ptr, s->len);
-  ptr->len += s->len;
+	sb_check(ptr, s->len);
+	memcpy(ptr->ptr + ptr->len, s->ptr, s->len);
+	ptr->len += s->len;
 }
 
 /* make sure that the sb at ptr has room for another len characters,
    and grow it if it doesn't.  */
 
 static void
-sb_check (ptr, len)
-     sb *ptr;
-     int len;
+    sb_check(ptr, len)
+        sb* ptr;
+int len;
 {
-  if (ptr->len + len >= 1 << ptr->pot)
-    {
-      sb tmp;
-      int pot = ptr->pot;
-      while (ptr->len + len >= 1 << pot)
-	pot++;
-      sb_build (&tmp, pot);
-      sb_add_sb (&tmp, ptr);
-      sb_kill (ptr);
-      *ptr = tmp;
-    }
+	if (ptr->len + len >= 1 << ptr->pot)
+	{
+		sb tmp;
+		int pot = ptr->pot;
+		while (ptr->len + len >= 1 << pot)
+			pot++;
+		sb_build(&tmp, pot);
+		sb_add_sb(&tmp, ptr);
+		sb_kill(ptr);
+		*ptr = tmp;
+	}
 }
 
 /* make the sb at ptr point back to the beginning.  */
 
 void
-sb_reset (ptr)
-     sb *ptr;
+    sb_reset(ptr)
+        sb* ptr;
 {
-  ptr->len = 0;
+	ptr->len = 0;
 }
 
 /* add character c to the end of the sb at ptr.  */
 
 void
-sb_add_char (ptr, c)
-     sb *ptr;
-     int c;
+    sb_add_char(ptr, c)
+        sb* ptr;
+int c;
 {
-  sb_check (ptr, 1);
-  ptr->ptr[ptr->len++] = c;
+	sb_check(ptr, 1);
+	ptr->ptr[ptr->len++] = c;
 }
 
 /* add null terminated string s to the end of sb at ptr.  */
 
 void
-sb_add_string (ptr, s)
-     sb *ptr;
-     const char *s;
+    sb_add_string(ptr, s)
+        sb* ptr;
+const char* s;
 {
-  int len = strlen (s);
-  sb_check (ptr, len);
-  memcpy (ptr->ptr + ptr->len, s, len);
-  ptr->len += len;
+	int len = strlen(s);
+	sb_check(ptr, len);
+	memcpy(ptr->ptr + ptr->len, s, len);
+	ptr->len += len;
 }
 
 /* add string at s of length len to sb at ptr */
 
 void
-sb_add_buffer (ptr, s, len)
-     sb *ptr;
-     const char *s;
-     int len;
+    sb_add_buffer(ptr, s, len)
+        sb* ptr;
+const char* s;
+int len;
 {
-  sb_check (ptr, len);
-  memcpy (ptr->ptr + ptr->len, s, len);
-  ptr->len += len;
+	sb_check(ptr, len);
+	memcpy(ptr->ptr + ptr->len, s, len);
+	ptr->len += len;
 }
 
 /* print the sb at ptr to the output file */
 
 void
-sb_print (outfile, ptr)
-     FILE *outfile;
-     sb *ptr;
+    sb_print(outfile, ptr)
+        FILE* outfile;
+sb* ptr;
 {
-  int i;
-  int nc = 0;
+	int i;
+	int nc = 0;
 
-  for (i = 0; i < ptr->len; i++)
-    {
-      if (nc)
+	for (i = 0; i < ptr->len; i++)
 	{
-	  fprintf (outfile, ",");
+		if (nc)
+		{
+			fprintf(outfile, ",");
+		}
+		fprintf(outfile, "%d", ptr->ptr[i]);
+		nc = 1;
 	}
-      fprintf (outfile, "%d", ptr->ptr[i]);
-      nc = 1;
-    }
 }
 
 void
-sb_print_at (outfile, idx, ptr)
-     FILE *outfile;
-     int idx;
-     sb *ptr;
+    sb_print_at(outfile, idx, ptr)
+        FILE* outfile;
+int idx;
+sb* ptr;
 {
-  int i;
-  for (i = idx; i < ptr->len; i++)
-    putc (ptr->ptr[i], outfile);
+	int i;
+	for (i = idx; i < ptr->len; i++)
+		putc(ptr->ptr[i], outfile);
 }
 
 /* put a null at the end of the sb at in and return the start of the
    string, so that it can be used as an arg to printf %s.  */
 
-char *
-sb_name (in)
-     sb *in;
+char* sb_name(in)
+sb* in;
 {
-  /* stick a null on the end of the string */
-  sb_add_char (in, 0);
-  return in->ptr;
+	/* stick a null on the end of the string */
+	sb_add_char(in, 0);
+	return in->ptr;
 }
 
 /* like sb_name, but don't include the null byte in the string.  */
 
-char *
-sb_terminate (in)
-     sb *in;
+char* sb_terminate(in)
+sb* in;
 {
-  sb_add_char (in, 0);
-  --in->len;
-  return in->ptr;
+	sb_add_char(in, 0);
+	--in->len;
+	return in->ptr;
 }
 
 /* start at the index idx into the string in sb at ptr and skip
    whitespace. return the index of the first non whitespace character */
 
-int
-sb_skip_white (idx, ptr)
-     int idx;
-     sb *ptr;
+int sb_skip_white(idx, ptr)
+int idx;
+sb* ptr;
 {
-  while (idx < ptr->len
-	 && (ptr->ptr[idx] == ' '
-	     || ptr->ptr[idx] == '\t'))
-    idx++;
-  return idx;
+	while (idx < ptr->len && (ptr->ptr[idx] == ' ' || ptr->ptr[idx] == '\t'))
+		idx++;
+	return idx;
 }
 
 /* start at the index idx into the sb at ptr. skips whitespace,
    a comma and any following whitespace. returnes the index of the
    next character.  */
 
-int
-sb_skip_comma (idx, ptr)
-     int idx;
-     sb *ptr;
+int sb_skip_comma(idx, ptr)
+int idx;
+sb* ptr;
 {
-  while (idx < ptr->len
-	 && (ptr->ptr[idx] == ' '
-	     || ptr->ptr[idx] == '\t'))
-    idx++;
+	while (idx < ptr->len && (ptr->ptr[idx] == ' ' || ptr->ptr[idx] == '\t'))
+		idx++;
 
-  if (idx < ptr->len
-      && ptr->ptr[idx] == ',')
-    idx++;
+	if (idx < ptr->len && ptr->ptr[idx] == ',')
+		idx++;
 
-  while (idx < ptr->len
-	 && (ptr->ptr[idx] == ' '
-	     || ptr->ptr[idx] == '\t'))
-    idx++;
+	while (idx < ptr->len && (ptr->ptr[idx] == ' ' || ptr->ptr[idx] == '\t'))
+		idx++;
 
-  return idx;
+	return idx;
 }
 
 // Eat literal until end, must start with " or '
 
-int sb_eat_literal( int idx, sb *out, sb *in )
+int sb_eat_literal(int idx, sb* out, sb* in)
 {
-  //printf( "sb_eat_literal\n" );
-  if ( idx < in->len && ( in->ptr[ idx ] == '"' || in->ptr[ idx ] == '\'' ) )
-    {
-      char str_type = in->ptr[ idx ];
-      sb_add_char( out, in->ptr[ idx++ ] );
-      while ( idx < in->len )
+	// printf( "sb_eat_literal\n" );
+	if (idx < in->len && (in->ptr[idx] == '"' || in->ptr[idx] == '\''))
 	{
-	  //	  sb_add_char( out, in->ptr[ idx ]);
-	  if ( in->ptr[ idx ] == '\\' && idx < in->len - 1 )
-	    {
-	      sb_add_char( out, in->ptr[ ++idx ]);
-	      idx++;
-	    }
-	  else if ( in->ptr[ idx ] == str_type )
-	    {
-	      sb_add_char( out, in->ptr[ idx++ ]);
-	      return idx;
-	    }
-	  else
-	    sb_add_char( out, in->ptr[ idx++ ]);
+		char str_type = in->ptr[idx];
+		sb_add_char(out, in->ptr[idx++]);
+		while (idx < in->len)
+		{
+			//	  sb_add_char( out, in->ptr[ idx ]);
+			if (in->ptr[idx] == '\\' && idx < in->len - 1)
+			{
+				sb_add_char(out, in->ptr[++idx]);
+				idx++;
+			}
+			else if (in->ptr[idx] == str_type)
+			{
+				sb_add_char(out, in->ptr[idx++]);
+				return idx;
+			}
+			else
+				sb_add_char(out, in->ptr[idx++]);
+		}
+		return idx;
 	}
-      return idx;
-    }
-  else
-    return idx;
+	else
+		return idx;
 }

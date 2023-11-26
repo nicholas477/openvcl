@@ -50,24 +50,24 @@
 /* Force void* decl for hpux.  This is what Bison uses.  --KR 1995.08.16 */
 
 #ifndef __GNUC__
-# if HAVE_ALLOCA_H
-#  include <alloca.h>
-# else
-#  ifdef _AIX
+#if HAVE_ALLOCA_H
+#include <alloca.h>
+#else
+#ifdef _AIX
 /* Indented so that pre-ansi C compilers will ignore it, rather than
    choke on it.  Some versions of AIX require this to be the first
    thing in the file.  */
- #pragma alloca
-#  else
-#   ifndef alloca /* predefined by HP cc +Olibcalls */
-#    if !defined (__STDC__) && !defined (__hpux)
-extern char *alloca ();
-#    else
-extern void *alloca ();
-#    endif /* __STDC__, __hpux */
-#   endif /* alloca */
-#  endif /* _AIX */
-# endif /* HAVE_ALLOCA_H */
+#pragma alloca
+#else
+#ifndef alloca /* predefined by HP cc +Olibcalls */
+#if !defined(__STDC__) && !defined(__hpux)
+extern char* alloca();
+#else
+extern void* alloca();
+#endif /* __STDC__, __hpux */
+#endif /* alloca */
+#endif /* _AIX */
+#endif /* HAVE_ALLOCA_H */
 #endif /* __GNUC__ */
 
 /* Now, tend to the rest of the configuration.  */
@@ -104,7 +104,7 @@ extern void *alloca ();
 #undef NDEBUG
 #endif
 #if __GNUC__ < 2 || (__GNUC__ == 2 && __GNUC_MINOR__ < 6)
-#define __PRETTY_FUNCTION__  ((char*)0)
+#define __PRETTY_FUNCTION__ ((char*)0)
 #endif
 #if 0
 
@@ -113,7 +113,7 @@ extern void *alloca ();
 #include <assert.h>
 #else /* BROKEN_ASSERT */
 #ifndef NDEBUG
-#define assert(p) ((p) ? 0 : (as_assert (__FILE__, __LINE__, __PRETTY_FUNCTION__), 0))
+#define assert(p) ((p) ? 0 : (as_assert(__FILE__, __LINE__, __PRETTY_FUNCTION__), 0))
 #else
 #define assert(p) ((p), 0)
 #endif
@@ -121,9 +121,9 @@ extern void *alloca ();
 
 #else
 
-#define assert(P) ((P) ? 0 : (as_assert (__FILE__, __LINE__, __PRETTY_FUNCTION__), 0))
+#define assert(P) ((P) ? 0 : (as_assert(__FILE__, __LINE__, __PRETTY_FUNCTION__), 0))
 #undef abort
-#define abort()		as_abort (__FILE__, __LINE__, __PRETTY_FUNCTION__)
+#define abort() as_abort(__FILE__, __LINE__, __PRETTY_FUNCTION__)
 
 #endif
 
@@ -132,52 +132,51 @@ extern void *alloca ();
 #ifdef BFD_ASSEMBLER
 #include "bfd.h"
 #endif
-#include "libiberty.h"
 
 /* Define the standard progress macros.  */
 #include "progress.h"
 
 /* This doesn't get taken care of anywhere.  */
-#ifndef __MWERKS__  /* Metrowerks C chokes on the "defined (inline)" */
-#if !defined (__GNUC__) && !defined (inline)
+#ifndef __MWERKS__ /* Metrowerks C chokes on the "defined (inline)" */
+#if !defined(__GNUC__) && !defined(inline)
 #define inline
 #endif
 #endif /* !__MWERKS__ */
 
 /* Other stuff from config.h.  */
 #ifdef NEED_DECLARATION_STRSTR
-extern char *strstr ();
+extern char* strstr();
 #endif
 #ifdef NEED_DECLARATION_MALLOC
-extern PTR malloc ();
-extern PTR realloc ();
+extern PTR malloc();
+extern PTR realloc();
 #endif
 #ifdef NEED_DECLARATION_FREE
-extern void free ();
+extern void free();
 #endif
 #ifdef NEED_DECLARATION_ERRNO
 extern int errno;
 #endif
 #ifdef NEED_DECLARATION_ENVIRON
-extern char **environ;
+extern char** environ;
 #endif
 
 /* This is needed for VMS.  */
-#if ! defined (HAVE_UNLINK) && defined (HAVE_REMOVE)
+#if !defined(HAVE_UNLINK) && defined(HAVE_REMOVE)
 #define unlink remove
 #endif
 
 /* Hack to make "gcc -Wall" not complain about obstack macros.  */
-#if !defined (memcpy) && !defined (bcopy)
-#define bcopy(src,dest,size)	memcpy (dest, src, size)
+#if !defined(memcpy) && !defined(bcopy)
+#define bcopy(src, dest, size) memcpy(dest, src, size)
 #endif
 
 /* Make Saber happier on obstack.h.  */
 #ifdef SABER
-#undef  __PTR_TO_INT
-#define __PTR_TO_INT(P) ((int) (P))
-#undef  __INT_TO_PTR
-#define __INT_TO_PTR(P) ((char *) (P))
+#undef __PTR_TO_INT
+#define __PTR_TO_INT(P) ((int)(P))
+#undef __INT_TO_PTR
+#define __INT_TO_PTR(P) ((char*)(P))
 #endif
 
 #ifndef __LINE__
@@ -205,25 +204,25 @@ extern char **environ;
 #define SEEK_SET 0
 #endif
 
-#define obstack_chunk_alloc xmalloc
+#define obstack_chunk_alloc malloc
 #define obstack_chunk_free xfree
 
 #define xfree free
 
 #include "asintl.h"
 
-#define BAD_CASE(val)							    \
-  {									    \
-    as_fatal (_("Case value %ld unexpected at line %d of file \"%s\"\n"),   \
-	      (long) val, __LINE__, __FILE__);				    \
-  }
-
+#define BAD_CASE(val)                                                        \
+	{                                                                        \
+		as_fatal(_("Case value %ld unexpected at line %d of file \"%s\"\n"), \
+		         (long)val, __LINE__, __FILE__);                             \
+	}
+
 #include "flonum.h"
 
 /* These are assembler-wide concepts */
 
 #ifdef BFD_ASSEMBLER
-extern bfd *stdoutput;
+extern bfd* stdoutput;
 typedef bfd_vma addressT;
 typedef bfd_signed_vma offsetT;
 #else
@@ -236,26 +235,26 @@ typedef addressT valueT;
 
 #ifndef COMMON
 #ifdef TEST
-#define COMMON			/* declare our COMMONs storage here.  */
+#define COMMON /* declare our COMMONs storage here.  */
 #else
-#define COMMON extern		/* our commons live elswhere */
+#define COMMON extern /* our commons live elswhere */
 #endif
 #endif
 /* COMMON now defined */
 
 #ifdef DEBUG
 #ifndef know
-#define know(p) assert(p)	/* Verify our assumptions! */
-#endif /* not yet defined */
+#define know(p) assert(p) /* Verify our assumptions! */
+#endif                    /* not yet defined */
 #else
-#define know(p)			/* know() checks are no-op.ed */
+#define know(p) /* know() checks are no-op.ed */
 #endif
-
+
 /* input_scrub.c */
 
 /* Supplies sanitised buffers to read.c.
    Also understands printing line-number part of error messages.  */
-
+
 /* subsegs.c     Sub-segments. Also, segment(=expression type)s.*/
 
 #ifndef BFD_ASSEMBLER
@@ -264,10 +263,10 @@ typedef addressT valueT;
 #include "bfd.h"
 #define N_SEGMENTS 40
 #define SEG_NORMAL(x) ((x) >= SEG_E0 && (x) <= SEG_E39)
-#define SEG_LIST SEG_E0,SEG_E1,SEG_E2,SEG_E3,SEG_E4,SEG_E5,SEG_E6,SEG_E7,SEG_E8,SEG_E9,\
-		 SEG_E10,SEG_E11,SEG_E12,SEG_E13,SEG_E14,SEG_E15,SEG_E16,SEG_E17,SEG_E18,SEG_E19,\
-		 SEG_E20,SEG_E21,SEG_E22,SEG_E23,SEG_E24,SEG_E25,SEG_E26,SEG_E27,SEG_E28,SEG_E29,\
-		 SEG_E30,SEG_E31,SEG_E32,SEG_E33,SEG_E34,SEG_E35,SEG_E36,SEG_E37,SEG_E38,SEG_E39
+#define SEG_LIST SEG_E0, SEG_E1, SEG_E2, SEG_E3, SEG_E4, SEG_E5, SEG_E6, SEG_E7, SEG_E8, SEG_E9,           \
+	             SEG_E10, SEG_E11, SEG_E12, SEG_E13, SEG_E14, SEG_E15, SEG_E16, SEG_E17, SEG_E18, SEG_E19, \
+	             SEG_E20, SEG_E21, SEG_E22, SEG_E23, SEG_E24, SEG_E25, SEG_E26, SEG_E27, SEG_E28, SEG_E29, \
+	             SEG_E30, SEG_E31, SEG_E32, SEG_E33, SEG_E34, SEG_E35, SEG_E36, SEG_E37, SEG_E38, SEG_E39
 #define SEG_TEXT SEG_E0
 #define SEG_DATA SEG_E1
 #define SEG_BSS SEG_E2
@@ -275,30 +274,27 @@ typedef addressT valueT;
 #else
 #define N_SEGMENTS 3
 #define SEG_NORMAL(x) ((x) == SEG_TEXT || (x) == SEG_DATA || (x) == SEG_BSS)
-#define SEG_LIST SEG_TEXT,SEG_DATA,SEG_BSS
+#define SEG_LIST SEG_TEXT, SEG_DATA, SEG_BSS
 #endif
 
 typedef enum _segT {
-  SEG_ABSOLUTE = 0,
-  SEG_LIST,
-  SEG_UNKNOWN,
-  SEG_GOOF,			/* Only happens if AS has a logic error.  */
-  /* Invented so we don't crash printing */
-  /* error message involving weird segment.  */
-  SEG_EXPR,			/* Intermediate expression values.  */
-  SEG_DEBUG,			/* Debug segment */
-  SEG_NTV,			/* Transfert vector preload segment */
-  SEG_PTV,			/* Transfert vector postload segment */
-  SEG_REGISTER			/* Mythical: a register-valued expression */
+	SEG_ABSOLUTE = 0,
+	SEG_LIST,
+	SEG_UNKNOWN,
+	SEG_GOOF, /* Only happens if AS has a logic error.  */
+	/* Invented so we don't crash printing */
+	/* error message involving weird segment.  */
+	SEG_EXPR,    /* Intermediate expression values.  */
+	SEG_DEBUG,   /* Debug segment */
+	SEG_NTV,     /* Transfert vector preload segment */
+	SEG_PTV,     /* Transfert vector postload segment */
+	SEG_REGISTER /* Mythical: a register-valued expression */
 } segT;
 
 #define SEG_MAXIMUM_ORDINAL (SEG_REGISTER)
 #else
-typedef asection *segT;
-#define SEG_NORMAL(SEG)		((SEG) != absolute_section	\
-				 && (SEG) != undefined_section	\
-				 && (SEG) != reg_section	\
-				 && (SEG) != expr_section)
+typedef asection* segT;
+#define SEG_NORMAL(SEG) ((SEG) != absolute_section && (SEG) != undefined_section && (SEG) != reg_section && (SEG) != expr_section)
 #endif
 typedef int subsegT;
 
@@ -309,10 +305,10 @@ COMMON subsegT now_subseg;
 COMMON segT now_seg;
 
 #ifdef BFD_ASSEMBLER
-#define segment_name(SEG)	bfd_get_section_name (stdoutput, SEG)
+#define segment_name(SEG) bfd_get_section_name(stdoutput, SEG)
 #else
-extern char const *const seg_name[];
-#define segment_name(SEG)	seg_name[(int) (SEG)]
+extern char const* const seg_name[];
+#define segment_name(SEG) seg_name[(int)(SEG)]
 #endif
 
 #ifndef BFD_ASSEMBLER
@@ -323,70 +319,70 @@ extern int section_alignment[];
 extern segT reg_section, expr_section;
 /* Shouldn't these be eliminated someday?  */
 extern segT text_section, data_section, bss_section;
-#define absolute_section	bfd_abs_section_ptr
-#define undefined_section	bfd_und_section_ptr
+#define absolute_section bfd_abs_section_ptr
+#define undefined_section bfd_und_section_ptr
 #else
-#define reg_section		SEG_REGISTER
-#define expr_section		SEG_EXPR
-#define text_section		SEG_TEXT
-#define data_section		SEG_DATA
-#define bss_section		SEG_BSS
-#define absolute_section	SEG_ABSOLUTE
-#define undefined_section	SEG_UNKNOWN
+#define reg_section SEG_REGISTER
+#define expr_section SEG_EXPR
+#define text_section SEG_TEXT
+#define data_section SEG_DATA
+#define bss_section SEG_BSS
+#define absolute_section SEG_ABSOLUTE
+#define undefined_section SEG_UNKNOWN
 #endif
 
 /* relax() */
 
 enum _relax_state {
-  /* Variable chars to be repeated fr_offset times.
-     Fr_symbol unused. Used with fr_offset == 0 for a
-     constant length frag.  */
-  rs_fill = 1,
+	/* Variable chars to be repeated fr_offset times.
+	   Fr_symbol unused. Used with fr_offset == 0 for a
+	   constant length frag.  */
+	rs_fill = 1,
 
-  /* Align.  The fr_offset field holds the power of 2 to which to
-     align.  The fr_var field holds the number of characters in the
-     fill pattern.  The fr_subtype field holds the maximum number of
-     bytes to skip when aligning, or 0 if there is no maximum.  */
-  rs_align,
+	/* Align.  The fr_offset field holds the power of 2 to which to
+	   align.  The fr_var field holds the number of characters in the
+	   fill pattern.  The fr_subtype field holds the maximum number of
+	   bytes to skip when aligning, or 0 if there is no maximum.  */
+	rs_align,
 
-  /* Align code.  The fr_offset field holds the power of 2 to which
-     to align.  This type is only generated by machine specific
-     code, which is normally responsible for handling the fill
-     pattern.  The fr_subtype field holds the maximum number of
-     bytes to skip when aligning, or 0 if there is no maximum.  */
-  rs_align_code,
+	/* Align code.  The fr_offset field holds the power of 2 to which
+	   to align.  This type is only generated by machine specific
+	   code, which is normally responsible for handling the fill
+	   pattern.  The fr_subtype field holds the maximum number of
+	   bytes to skip when aligning, or 0 if there is no maximum.  */
+	rs_align_code,
 
-  /* Test for alignment.  Like rs_align, but used by several targets
-     to warn if data is not properly aligned.  */
-  rs_align_test,
+	/* Test for alignment.  Like rs_align, but used by several targets
+	   to warn if data is not properly aligned.  */
+	rs_align_test,
 
-  /* Org: Fr_offset, fr_symbol: address. 1 variable char: fill
-     character.  */
-  rs_org,
+	/* Org: Fr_offset, fr_symbol: address. 1 variable char: fill
+	   character.  */
+	rs_org,
 
 #ifndef WORKING_DOT_WORD
-  /* JF: gunpoint */
-  rs_broken_word,
+	/* JF: gunpoint */
+	rs_broken_word,
 #endif
 
-  /* machine-specific relaxable (or similarly alterable) instruction */
-  rs_machine_dependent,
+	/* machine-specific relaxable (or similarly alterable) instruction */
+	rs_machine_dependent,
 
-  /* .space directive with expression operand that needs to be computed
-     later.  Similar to rs_org, but different.
-     fr_symbol: operand
-     1 variable char: fill character  */
-  rs_space,
+	/* .space directive with expression operand that needs to be computed
+	   later.  Similar to rs_org, but different.
+	   fr_symbol: operand
+	   1 variable char: fill character  */
+	rs_space,
 
-  /* A DWARF leb128 value; only ELF uses this.  The subtype is 0 for
-     unsigned, 1 for signed.  */
-  rs_leb128,
+	/* A DWARF leb128 value; only ELF uses this.  The subtype is 0 for
+	   unsigned, 1 for signed.  */
+	rs_leb128,
 
-  /* Exception frame information which we may be able to optimize.  */
-  rs_cfa,
+	/* Exception frame information which we may be able to optimize.  */
+	rs_cfa,
 
-  /* Cross-fragment dwarf2 line number optimization.  */
-  rs_dwarf2dbg
+	/* Cross-fragment dwarf2 line number optimization.  */
+	rs_dwarf2dbg
 };
 
 typedef enum _relax_state relax_stateT;
@@ -398,11 +394,11 @@ typedef unsigned int relax_substateT;
 /* Enough bits for address, but still an integer type.
    Could be a problem, cross-assembling for 64-bit machines.  */
 typedef addressT relax_addressT;
-
+
 /* main program "as.c" (command arguments etc) */
 
-COMMON unsigned char flag_no_comments; /* -f */
-COMMON unsigned char flag_debug; /* -D */
+COMMON unsigned char flag_no_comments;        /* -f */
+COMMON unsigned char flag_debug;              /* -D */
 COMMON unsigned char flag_signed_overflow_ok; /* -J */
 #ifndef WORKING_DOT_WORD
 COMMON unsigned char flag_warn_displacement; /* -K */
@@ -438,10 +434,10 @@ COMMON int flag_strip_local_absolute;
 COMMON int flag_traditional_format;
 
 /* name of emitted object file */
-COMMON char *out_file_name;
+COMMON char* out_file_name;
 
 /* name of file defining extensions to the basic instruction set */
-COMMON char *insttbl_file_name;
+COMMON char* insttbl_file_name;
 
 /* TRUE if we need a second pass.  */
 COMMON int need_pass_2;
@@ -462,16 +458,16 @@ extern int listing;
    number directives that the assembler resolves.  */
 
 enum debug_info_type {
-  DEBUG_UNSPECIFIED,
-  DEBUG_NONE,
-  DEBUG_STABS,
-  DEBUG_ECOFF,
-  DEBUG_DWARF,
-  DEBUG_DWARF2
+	DEBUG_UNSPECIFIED,
+	DEBUG_NONE,
+	DEBUG_STABS,
+	DEBUG_ECOFF,
+	DEBUG_DWARF,
+	DEBUG_DWARF2
 };
 
 extern enum debug_info_type debug_type;
-
+
 /* Maximum level of macro nesting.  */
 extern int max_macro_nest;
 
@@ -479,27 +475,28 @@ extern int max_macro_nest;
    increase malloc calls for monitoring memory allocation.  */
 extern int chunksize;
 
-struct _pseudo_type {
-  /* assembler mnemonic, lower case, no '.' */
-  const char *poc_name;
-  /* Do the work */
-  void (*poc_handler) PARAMS ((int));
-  /* Value to pass to handler */
-  int poc_val;
+struct _pseudo_type
+{
+	/* assembler mnemonic, lower case, no '.' */
+	const char* poc_name;
+	/* Do the work */
+	void(*poc_handler) PARAMS((int));
+	/* Value to pass to handler */
+	int poc_val;
 };
 
 typedef struct _pseudo_type pseudo_typeS;
 
 /* Prefer varargs for non-ANSI compiler, since some will barf if the
    ellipsis definition is used with a no-arguments declaration.  */
-#if defined (HAVE_VARARGS_H) && !defined (__STDC__)
+#if defined(HAVE_VARARGS_H) && !defined(__STDC__)
 #undef HAVE_STDARG_H
 #endif
 
-#if defined (HAVE_STDARG_H)
+#if defined(HAVE_STDARG_H)
 #define USE_STDARG
 #endif
-#if !defined (USE_STDARG) && defined (HAVE_VARARGS_H)
+#if !defined(USE_STDARG) && defined(HAVE_VARARGS_H)
 #define USE_VARARGS
 #endif
 
@@ -514,84 +511,85 @@ typedef struct _pseudo_type pseudo_typeS;
 #define __format__ format
 #endif
 
-#define PRINTF_LIKE(FCN) \
-  void FCN (const char *format, ...) \
-    __attribute__ ((__format__ (__printf__, 1, 2)))
-#define PRINTF_WHERE_LIKE(FCN) \
-  void FCN (char *file, unsigned int line, const char *format, ...) \
-    __attribute__ ((__format__ (__printf__, 3, 4)))
+#define PRINTF_LIKE(FCN)              \
+	void FCN(const char* format, ...) \
+	    __attribute__((__format__(__printf__, 1, 2)))
+#define PRINTF_WHERE_LIKE(FCN)                                       \
+	void FCN(char* file, unsigned int line, const char* format, ...) \
+	    __attribute__((__format__(__printf__, 3, 4)))
 
 #else /* __GNUC__ < 2 || defined(VMS) */
 
-#define PRINTF_LIKE(FCN)	void FCN PARAMS ((const char *format, ...))
-#define PRINTF_WHERE_LIKE(FCN)	void FCN PARAMS ((char *file, \
-						  unsigned int line, \
-					  	  const char *format, ...))
+#define PRINTF_LIKE(FCN) void FCN PARAMS((const char* format, ...))
+#define PRINTF_WHERE_LIKE(FCN) void FCN PARAMS((char* file,        \
+	                                            unsigned int line, \
+	                                            const char* format, ...))
 
 #endif /* __GNUC__ < 2 || defined(VMS) */
 
 #else /* ! USE_STDARG */
 
-#define PRINTF_LIKE(FCN)	void FCN ()
-#define PRINTF_WHERE_LIKE(FCN)	void FCN ()
+#define PRINTF_LIKE(FCN) void FCN()
+#define PRINTF_WHERE_LIKE(FCN) void FCN()
 
 #endif /* ! USE_STDARG */
 
-PRINTF_LIKE (as_bad);
-PRINTF_LIKE (as_fatal) ATTRIBUTE_NORETURN;
-PRINTF_LIKE (as_tsktsk);
-PRINTF_LIKE (as_warn);
-PRINTF_WHERE_LIKE (as_bad_where);
-PRINTF_WHERE_LIKE (as_warn_where);
+PRINTF_LIKE(as_bad);
+PRINTF_LIKE(as_fatal)
+ATTRIBUTE_NORETURN;
+PRINTF_LIKE(as_tsktsk);
+PRINTF_LIKE(as_warn);
+PRINTF_WHERE_LIKE(as_bad_where);
+PRINTF_WHERE_LIKE(as_warn_where);
 
-void as_assert PARAMS ((const char *, int, const char *));
-void as_abort PARAMS ((const char *, int, const char *)) ATTRIBUTE_NORETURN;
+void as_assert PARAMS((const char*, int, const char*));
+void as_abort PARAMS((const char*, int, const char*)) ATTRIBUTE_NORETURN;
 
-void fprint_value PARAMS ((FILE *file, addressT value));
-void sprint_value PARAMS ((char *buf, addressT value));
+void fprint_value PARAMS((FILE * file, addressT value));
+void sprint_value PARAMS((char* buf, addressT value));
 
-int had_errors PARAMS ((void));
-int had_warnings PARAMS ((void));
+int had_errors PARAMS((void));
+int had_warnings PARAMS((void));
 
-void print_version_id PARAMS ((void));
-char *app_push PARAMS ((void));
-char *atof_ieee PARAMS ((char *str, int what_kind, LITTLENUM_TYPE * words));
-char *input_scrub_include_file PARAMS ((char *filename, char *position));
-extern void input_scrub_insert_line PARAMS((const char *line));
-extern void input_scrub_insert_file PARAMS((char *path));
-char *input_scrub_new_file PARAMS ((char *filename));
-char *input_scrub_next_buffer PARAMS ((char **bufp));
-int do_scrub_chars PARAMS ((int (*get) (char *, int), char *to, int tolen));
-int gen_to_words PARAMS ((LITTLENUM_TYPE * words, int precision,
-			  long exponent_bits));
-int had_err PARAMS ((void));
-int ignore_input PARAMS ((void));
-void cond_finish_check PARAMS ((int));
-void cond_exit_macro PARAMS ((int));
-int seen_at_least_1_file PARAMS ((void));
-void app_pop PARAMS ((char *arg));
-void as_howmuch PARAMS ((FILE * stream));
-void as_perror PARAMS ((const char *gripe, const char *filename));
-void as_where PARAMS ((char **namep, unsigned int *linep));
-void bump_line_counters PARAMS ((void));
-void do_scrub_begin PARAMS ((int));
-void input_scrub_begin PARAMS ((void));
-void input_scrub_close PARAMS ((void));
-void input_scrub_end PARAMS ((void));
-int new_logical_line PARAMS ((char *fname, int line_number));
-void subsegs_begin PARAMS ((void));
-void subseg_change PARAMS ((segT seg, int subseg));
-segT subseg_new PARAMS ((const char *name, subsegT subseg));
-segT subseg_force_new PARAMS ((const char *name, subsegT subseg));
-void subseg_set PARAMS ((segT seg, subsegT subseg));
+void print_version_id PARAMS((void));
+char* app_push PARAMS((void));
+char* atof_ieee PARAMS((char* str, int what_kind, LITTLENUM_TYPE* words));
+char* input_scrub_include_file PARAMS((char* filename, char* position));
+extern void input_scrub_insert_line PARAMS((const char* line));
+extern void input_scrub_insert_file PARAMS((char* path));
+char* input_scrub_new_file PARAMS((char* filename));
+char* input_scrub_next_buffer PARAMS((char** bufp));
+int do_scrub_chars PARAMS((int (*get)(char*, int), char* to, int tolen));
+int gen_to_words PARAMS((LITTLENUM_TYPE * words, int precision,
+                         long exponent_bits));
+int had_err PARAMS((void));
+int ignore_input PARAMS((void));
+void cond_finish_check PARAMS((int));
+void cond_exit_macro PARAMS((int));
+int seen_at_least_1_file PARAMS((void));
+void app_pop PARAMS((char* arg));
+void as_howmuch PARAMS((FILE * stream));
+void as_perror PARAMS((const char* gripe, const char* filename));
+void as_where PARAMS((char** namep, unsigned int* linep));
+void bump_line_counters PARAMS((void));
+void do_scrub_begin PARAMS((int));
+void input_scrub_begin PARAMS((void));
+void input_scrub_close PARAMS((void));
+void input_scrub_end PARAMS((void));
+int new_logical_line PARAMS((char* fname, int line_number));
+void subsegs_begin PARAMS((void));
+void subseg_change PARAMS((segT seg, int subseg));
+segT subseg_new PARAMS((const char* name, subsegT subseg));
+segT subseg_force_new PARAMS((const char* name, subsegT subseg));
+void subseg_set PARAMS((segT seg, subsegT subseg));
 #ifdef BFD_ASSEMBLER
-segT subseg_get PARAMS ((const char *, int));
+segT subseg_get PARAMS((const char*, int));
 #endif
-int subseg_text_p PARAMS ((segT));
+int subseg_text_p PARAMS((segT));
 
-void start_dependencies PARAMS ((char *));
-void register_dependency PARAMS ((char *));
-void print_dependencies PARAMS ((void));
+void start_dependencies PARAMS((char*));
+void register_dependency PARAMS((char*));
+void print_dependencies PARAMS((void));
 
 struct expressionS;
 struct fix;
@@ -601,36 +599,36 @@ typedef struct frag fragS;
 
 #ifdef BFD_ASSEMBLER
 /* literal.c */
-valueT add_to_literal_pool PARAMS ((symbolS *, valueT, segT, int));
+valueT add_to_literal_pool PARAMS((symbolS*, valueT, segT, int));
 #endif
 
-int check_eh_frame PARAMS ((struct expressionS *, unsigned int *));
-int eh_frame_estimate_size_before_relax PARAMS ((fragS *));
-int eh_frame_relax_frag PARAMS ((fragS *));
-void eh_frame_convert_frag PARAMS ((fragS *));
+int check_eh_frame PARAMS((struct expressionS*, unsigned int*));
+int eh_frame_estimate_size_before_relax PARAMS((fragS*));
+int eh_frame_relax_frag PARAMS((fragS*));
+void eh_frame_convert_frag PARAMS((fragS*));
 
-#include "expr.h"		/* Before targ-*.h */
+#include "expr.h" /* Before targ-*.h */
 
 /* this one starts the chain of target dependant headers */
-//#include "targ-env.h"
+// #include "targ-env.h"
 
 #ifdef TC_ARC
 #include "struc-symbol.h"
 #endif
 
-//#include "write.h"
-//#include "frags.h"
+// #include "write.h"
+// #include "frags.h"
 #include "hash.h"
-//#include "read.h"
-//#include "symbols.h"
+// #include "read.h"
+// #include "symbols.h"
 
-//#include "tc.h"
-//#include "obj.h"
+// #include "tc.h"
+// #include "obj.h"
 
 #ifdef USE_EMULATIONS
 #include "emul.h"
 #endif
-//#include "listing.h"
+// #include "listing.h"
 
 #ifdef TC_M68K
 /* True if we are assembling in m68k MRI mode.  */
@@ -642,7 +640,7 @@ COMMON int flag_m68k_mri;
 #ifdef WARN_COMMENTS
 COMMON int warn_comment;
 COMMON unsigned int found_comment;
-COMMON char *found_comment_file;
+COMMON char* found_comment_file;
 #endif
 
 #ifndef NUMBERS_WITH_SUFFIX
@@ -666,19 +664,19 @@ COMMON char *found_comment_file;
 #endif
 
 #ifndef TEXT_SECTION_NAME
-#define TEXT_SECTION_NAME	".text"
-#define DATA_SECTION_NAME	".data"
-#define BSS_SECTION_NAME	".bss"
+#define TEXT_SECTION_NAME ".text"
+#define DATA_SECTION_NAME ".data"
+#define BSS_SECTION_NAME ".bss"
 #endif
 
 #ifndef OCTETS_PER_BYTE_POWER
 #define OCTETS_PER_BYTE_POWER 0
 #endif
 #ifndef OCTETS_PER_BYTE
-#define OCTETS_PER_BYTE (1<<OCTETS_PER_BYTE_POWER)
+#define OCTETS_PER_BYTE (1 << OCTETS_PER_BYTE_POWER)
 #endif
-#if OCTETS_PER_BYTE != (1<<OCTETS_PER_BYTE_POWER)
- #error "Octets per byte conflicts with its power-of-two definition!"
+#if OCTETS_PER_BYTE != (1 << OCTETS_PER_BYTE_POWER)
+#error "Octets per byte conflicts with its power-of-two definition!"
 #endif
 
 #endif /* GAS */

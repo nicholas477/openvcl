@@ -28,7 +28,7 @@
 
 bin_PROGRAMS = masp
 masp_SOURCES = masp.c macro.c sb.c hash.c
-masp_LDADD = ../libiberty/libiberty.a
+masp_LDADD = -lbfd
 
 EXTRA_DIST = as.h asintl.h bignum.h bin-bugs.h expr.h flonum.h fopen-same.h \
 	hash.h macro.h progress.h sb.h 

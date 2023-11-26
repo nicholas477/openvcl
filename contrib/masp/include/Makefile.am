@@ -7,7 +7,6 @@ noinst_HEADERS = ansidecl.h	\
 	fnmatch.h		\
 	getopt.h		\
 	hashtab.h		\
-	libiberty.h		\
 	md5.h			\
 	objalloc.h		\
 	obstack.h		\
