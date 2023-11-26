@@ -27,7 +27,6 @@ ACLOCAL_AMFLAGS = -I m4
 
 #bin_SCRIPTS = auto.sh
 
-#SUBDIRS = src libiberty
 SUBDIRS = src include
 #EXTRA_DIST = advent.spec
 EXTRA_DIST = auto.sh
