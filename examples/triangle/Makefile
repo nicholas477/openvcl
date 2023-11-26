@@ -12,9 +12,9 @@ EE_INCS = -I../pdk/src
 EE_LDFLAGS = -L../pdk/lib
 EE_BIN = triangle.elf
 EE_OBJS = main.o vu1Triangle.o
-EE_LIBS = -lc -lkernel -lsyscall -lpdk -lc
+EE_LIBS = -lc -lkernel -lpdk -lc -lmath3d
 EE_DVP = dvp-as
-VCL = ../../openvcl
+VCL = openvcl
 
 all: $(EE_BIN) $(VU_OBJECTS) 
 
