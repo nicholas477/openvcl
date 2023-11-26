@@ -7361,7 +7361,7 @@ done
 
 
 
-                                        ac_config_files="$ac_config_files Makefile src/Makefile libiberty/Makefile include/Makefile"
+                                        ac_config_files="$ac_config_files Makefile src/Makefile include/Makefile"
 
 #AC_CONFIG_HEADERS([src/config.h libiberty/config.h])
           ac_config_headers="$ac_config_headers include/config.h"
@@ -7921,7 +7921,6 @@ do
   # Handling of arguments.
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
-  "libiberty/Makefile" ) CONFIG_FILES="$CONFIG_FILES libiberty/Makefile" ;;
   "include/Makefile" ) CONFIG_FILES="$CONFIG_FILES include/Makefile" ;;
   "$ac_config_libobj_dir/fnmatch.h" ) CONFIG_LINKS="$CONFIG_LINKS $ac_config_libobj_dir/fnmatch.h:$ac_config_libobj_dir/fnmatch_.h" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
